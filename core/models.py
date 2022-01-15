@@ -10,10 +10,11 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     likes = models.IntegerField(default=0)
+    views = models.IntegerField(default=0)
 
 
 class Comment(models.Model):
-    text = models.TextField()
+    text = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
