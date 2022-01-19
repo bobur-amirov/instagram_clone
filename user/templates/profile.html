@@ -1,0 +1,27 @@
+{% extends 'core/base.html' %}
+
+{% block title %} {% endblock %}
+
+
+{% block content %}
+
+
+    <div class="row">
+    <div class="col-lg-3">
+        Rasm
+    </div>
+     <div class="col-lg-9">
+         <h2>{{ profile.username }}</h2>
+         <p>{{ profile_posts.count }} posts</p>
+         <p>{{ profile.followed.count }} Followed</p>
+         <p>{{ profile.follower.count }} Follower</p>
+    </div>
+    </div>
+    <div class="row">
+        {% for pp in profile_posts %}
+            <div class="col-lg-4">
+                <img style="width: 300px" src="{{ pp.image.url }}">
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

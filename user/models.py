@@ -14,5 +14,21 @@ class Profile(AbstractUser):
 
 
 class Following(models.Model):
-    user_from = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user_from')
-    user_to = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user_to')
+    user = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='user')
+    user_from = models.ManyToManyField(Profile, related_name='followed')
+    user_to = models.ManyToManyField(Profile, related_name='follower')
+
+    @classmethod
+    def follow(cls, user, another_account):
+        obj, create = cls.objects.get_or_create(user=user)
+        obj.followed.add(another_account)
+        print("followed")
+
+    @classmethod
+    def unfollow(cls, user, another_account):
+        obj, create = cls.objects.get_or_create(user=user)
+        obj.followed.remove(another_account)
+        print("unfollowed")
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
