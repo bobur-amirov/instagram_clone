@@ -1,8 +1,8 @@
 from django.urls import path
 
-
-from .views import profile
+from .views import profile, signup
 
 urlpatterns = [
-    path('<slug:username>', profile, name='profile'),
+    path('signup/', signup, name='signup'),
+    path('account/<slug:username>', profile, name='profile'),
 ]
