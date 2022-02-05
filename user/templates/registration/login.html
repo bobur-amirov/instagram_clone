@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+
+{% block title %} {% endblock %}
+
+
+{% block content %}
+
+
+    <div class="row">
+    <div class="col-lg-6">
+        Rasm
+    </div>
+    <div class="col-lg-6">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit"> Login </button>
+        </form>
+    </div>
+
+{% endblock %}

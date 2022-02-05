@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
+from django.contrib.auth.views import LoginView
 
-from core.models import Post
+from core.models import Post, Follow
 from .models import Profile
 from .forms import ProfileForm
 
@@ -13,7 +14,11 @@ def profile(request, username):
         'profile': profile,
         'profile_posts': profile_posts,
     }
-    return render(request, 'user/profile.html', context)
+    return render(request, 'registration/profile.html', context)
+
+
+class LoginPage(LoginView):
+    template_name = 'registration/login.html'
 
 
 def signup(request):
@@ -25,7 +30,7 @@ def signup(request):
             user.phone = form.cleaned_data['phone']
             user.set_password(form.cleaned_data['password'])
             user.save()
-            return redirect('profile', user.username)
+            return redirect('home')
     else:
         form = ProfileForm()
 
@@ -33,4 +38,4 @@ def signup(request):
         'form': form,
     }
 
-    return render(request, 'user/signup.html', context)
+    return render(request, 'registration/signup.html', context)

@@ -4,9 +4,13 @@ from .models import Post,Comment
 
 
 class PostForm(forms.ModelForm):
+    title = forms.CharField(required=True)
+    content = forms.CharField(required=True)
+    image = forms.ImageField(required=True)
+    tags = forms.CharField(required=True)
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ['title', 'content', 'image', 'tags']
 
 
 class CommentForm(forms.ModelForm):
