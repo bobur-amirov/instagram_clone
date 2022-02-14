@@ -8,8 +8,7 @@ class Profile(AbstractUser):
     phone = models.CharField(max_length=15, unique=True)
     location = models.CharField(max_length=30, null=True, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    favorites = models.ManyToManyField("core.Post", related_name='post_profile', blank=True, null=True)
 
     def __str__(self):
         return self.username
-
-

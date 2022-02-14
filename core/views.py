@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Post, Comment, Likes, Stream, Tag
 from .forms import CommentForm, PostForm
+from user.models import Profile
 
 
 def home(request):
@@ -19,6 +20,37 @@ def home(request):
     }
 
     return render(request, 'core/home.html', context)
+
+
+def post_detail(request, pk):
+    post = get_object_or_404(Post, id=pk)
+    favorite = False
+
+    if request.user.is_authenticated:
+        profile = Profile.objects.get(username=request.user.username)
+
+        if profile.favorites.filter(id=pk).exists():
+            favorite = True
+
+    comments = Comment.objects.filter(post=post)
+    form = CommentForm()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form_comment = form.save(commit=False)
+            form_comment.profile = request.user
+            form_comment.post = post
+            form_comment.save()
+            return redirect('post_detail', post.id)
+
+    context = {
+        'post': post,
+        'form': form,
+        'comments': comments,
+        'favorite': favorite,
+    }
+
+    return render(request, 'core/post_detail.html', context)
 
 
 def new_post(request):
@@ -52,29 +84,16 @@ def new_post(request):
     return render(request, 'core/post_add.html', context)
 
 
-
-
-def post_detail(request, pk):
-    post = Post.objects.get(pk=pk)
-    comments = Comment.objects.filter(post=post)
-    form = CommentForm()
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
-        post_id = request.POST.get('post_id')
-        if form.is_valid():
-            form_comment = form.save(commit=False)
-            form_comment.profile = request.user
-            form_comment.post = Post.objects.get(id=post_id)
-            form_comment.save()
-            return redirect('post_detail', post.id)
+def tags(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    posts = Post.objects.filter(tags=tag).order_by('-created_at')
 
     context = {
-        'post': post,
-        'form': form,
-        'comments': comments,
+        'tag': tag,
+        'posts': posts,
     }
 
-    return render(request, 'core/post_detail.html', context)
+    return render(request, 'core/tags.html', context)
 
 
 def likes(request, pk):
@@ -95,5 +114,18 @@ def likes(request, pk):
 
     post.likes = current_like
     post.save()
+
+    return redirect('post_detail', post.id)
+
+
+def favorite(request, pk):
+    user = request.user
+    post = Post.objects.get(id=pk)
+    profile = Profile.objects.get(username=user.username)
+
+    if profile.favorites.filter(id=pk).exists():
+        profile.favorites.remove(post)
+    else:
+        profile.favorites.add(post)
 
     return redirect('post_detail', post.id)

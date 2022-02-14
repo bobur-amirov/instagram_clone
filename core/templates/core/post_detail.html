@@ -19,8 +19,14 @@
                 <img src="{{ post.image.url }}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a href="{% url 'likes' post.id %}">{{ post.likes }} Like</a>
-                        <a href="{% url 'post_detail' post.id %}"> Comment</a>
+                        <a href="{% url 'likes' post.id %}" class="btn btn-danger">{{ post.likes }} <i class="bi bi-heart"></i></a>
+                        <a href="{% url 'post_detail' post.id %}" class="btn btn-primary"> <i class="bi bi-chat"></i></a>
+                        {% if favorite is True %}
+                            <a href="{% url 'favorite' post.id %}" class="btn btn-danger"><i class="bi bi-download"></i></a>
+                        {% else %}
+                            <a href="{% url 'favorite' post.id %}" class="btn btn-success"><i
+                                    class="bi bi-download"></i></a>
+                        {% endif %}
                         Share
                     </h5>
                     <p class="card-text"> {{ post.user.username }}: {{ post.content }}</p>

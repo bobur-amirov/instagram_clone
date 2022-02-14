@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import LoginView
+from django.urls import resolve
 
 from core.models import Post, Follow
 from .models import Profile
@@ -8,13 +9,19 @@ from .forms import ProfileForm
 
 def profile(request, username):
     profile = Profile.objects.get(username=username)
-    profile_posts = Post.objects.filter(user=profile)
+    url_name = resolve(request.path).url_name
+
+    if url_name == 'profile':
+        posts = Post.objects.filter(user=profile).order_by('-created_at')
+    else:
+        posts = profile.favorites.all()
 
     context = {
         'profile': profile,
-        'profile_posts': profile_posts,
+        'posts': posts,
+        'url_name': url_name,
     }
-    return render(request, 'registration/profile.html', context)
+    return render(request, 'profile.html', context)
 
 
 class LoginPage(LoginView):
