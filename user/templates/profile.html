@@ -12,6 +12,15 @@
         </div>
         <div class="col-lg-9">
             <h2> {{ profile.username }}</h2>
+            {% if user.is_authenticated and user != profile.user %}
+                {% if follow_status == True %}
+                    <a class="btn btn-danger" href="{% url 'follow' profile.username 0 %}">Unfollow</a>
+                {% else %}
+                    <a class="btn btn-success" href="{% url 'follow' profile.username 1 %}">Follow</a>
+                {% endif %}
+            {% endif %}
+        <br>
+            <a href="{% url 'edit_profile' profile.username %}">Edit Profile</a>
             <div class="row">
                 <div class="col-lg-4">
                     {{ posts.count }} posts

@@ -1,0 +1,52 @@
+{% extends 'core/base.html' %}
+
+{% block title %} {% endblock %}
+
+
+{% block content %}
+
+
+    <div class="row">
+        <div class="col-lg-6">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">First name</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Last name</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    {{ form.username }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Image</label>
+                    {{ form.image }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Phone number</label>
+                    {{ form.phone }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Bio</label>
+                    {{ form.bio }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Location</label>
+                    {{ form.location }}
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Birhtday</label>
+                    {{ form.birth_date }}
+                </div>
+                <button type="submit"> Update</button>
+            </form>
+        </div>
+        <div class="col-lg-6">
+            Rasm
+        </div>
+
+{% endblock %}

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserChangeForm
 
 from .models import Profile
 
@@ -31,3 +32,9 @@ class ProfileForm(forms.ModelForm):
         if Profile.objects.filter(phone=phone).exists():
             raise forms.ValidationError('Please use another Phone, that is already token')
         return phone
+
+
+class ProfileEditForm(UserChangeForm):
+    class Meta:
+        model = Profile
+        fields = ['first_name', 'last_name', 'username', 'image', 'phone', 'bio', 'location', 'birth_date']
